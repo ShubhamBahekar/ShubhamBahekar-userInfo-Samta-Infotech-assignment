@@ -1,0 +1,8 @@
+.search-list ol {
+  width: 6rem;
+  height: 1rem;
+  position: absolute;
+  background-color: aqua;
+  list-style-type: none;
+  border: 0.1rem solid black;
+}

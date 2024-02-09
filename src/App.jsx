@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import userData from "./ApiData.jsx";
+import UserCard from "./components/card/Card.jsx";
+import UserForm from "./components/form/Form.jsx";
+import UnorderList from "./components/unorderList/UnorderList.jsx";
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -13,7 +16,7 @@ function App() {
       try {
         const userList = await userData.getApiData();
         setUsers(userList);
-        setFilteredUsers(userList); // Initialize filteredUsers with all users
+        setFilteredUsers(userList);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -21,7 +24,6 @@ function App() {
 
     fetchData();
 
-    // Retrieve search history from localStorage on component mount
     const localStorageData = localStorage.getItem("userSearchText");
     console.log("localStorageData:", localStorageData);
     if (localStorageData) {
@@ -38,18 +40,17 @@ function App() {
 
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
-    filterUsers(e.target.value); // Filter users as user types
+    filterUsers(e.target.value);
   };
 
   const handleSearchSubmit = (e) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
     const text = searchText;
-    storedHistory(text); // Store search text in history
+    storedHistory(text);
   };
 
   const storedHistory = (text) => {
     setSearchTextHistory((prevHistory) => {
-      // Maintain a maximum of 5 items in search history
       const updatedHistory = [text, ...prevHistory.slice(0, 4)];
       console.log("Updated history:", updatedHistory);
       localStorage.setItem("userSearchText", JSON.stringify(updatedHistory));
@@ -67,7 +68,7 @@ function App() {
 
   const handleHistoryItemClick = (item) => {
     setSearchText(item);
-    filterUsers(item); // Filter users when history item is clicked
+    filterUsers(item);
   };
 
   const sortDataByName = () => {
@@ -82,42 +83,22 @@ function App() {
   return (
     <div className="container">
       <div className="searchBox">
-        <form onSubmit={handleSearchSubmit}>
-          <input
-            type="text"
-            placeholder="Search By Name"
-            value={searchText}
-            onChange={handleSearchChange}
-          />
-        </form>
+        <UserForm
+          handleSearchSubmit={handleSearchSubmit}
+          handleSearchChange={handleSearchChange}
+          searchText={searchText}
+        />
         {searchTextHistory.length > 0 && (
           <div className="search-history">
-            <ul className="search-list">
-              {searchTextHistory.map((item, index) => (
-                <li
-                  key={index}
-                  onClick={() => handleHistoryItemClick(item)}
-                  id="list"
-                >
-                  <h5>{item}</h5>
-                </li>
-              ))}
-            </ul>
+            <UnorderList
+              searchTextHistory={searchTextHistory}
+              handleHistoryItemClick={handleHistoryItemClick}
+            />
           </div>
         )}
         <button onClick={sortDataByName}>Search by Name</button>
       </div>
-      <div className="users">
-        {filteredUsers.map((user, id) => (
-          <div className="userList" key={id}>
-            <h5>Name: {user.name}</h5>
-            <h5>Username: {user.username}</h5>
-            <h5>Email: {user.email}</h5>
-            <h5>City: {user.address.city}</h5>
-            <h5>CompanyName: {user.company.name}</h5>
-          </div>
-        ))}
-      </div>
+      <UserCard filteredUsers={filteredUsers} />
     </div>
   );
 }
