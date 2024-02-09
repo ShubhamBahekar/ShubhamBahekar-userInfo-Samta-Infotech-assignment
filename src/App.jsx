@@ -25,15 +25,15 @@ function App() {
     fetchData();
 
     const localStorageData = localStorage.getItem("userSearchText");
-    console.log("localStorageData:", localStorageData);
+    // console.log("localStorageData:", localStorageData);
     if (localStorageData) {
-      console.log("Parsing localStorageData...");
+      // console.log("Parsing localStorageData...");
       try {
         const parsedData = JSON.parse(localStorageData);
-        console.log("Parsed data:", parsedData);
+        // console.log("Parsed data:", parsedData);
         setSearchTextHistory(parsedData);
       } catch (error) {
-        console.error("Error parsing localStorageData:", error);
+        // console.error("Error parsing localStorageData:", error);
       }
     }
   }, []);
@@ -52,9 +52,9 @@ function App() {
   const storedHistory = (text) => {
     setSearchTextHistory((prevHistory) => {
       const updatedHistory = [text, ...prevHistory.slice(0, 4)];
-      console.log("Updated history:", updatedHistory);
+      // console.log("Updated history:", updatedHistory);
       localStorage.setItem("userSearchText", JSON.stringify(updatedHistory));
-      console.log("Stored in local storage:", JSON.stringify(updatedHistory));
+      // console.log("Stored in local storage:", JSON.stringify(updatedHistory));
       return updatedHistory;
     });
   };

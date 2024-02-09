@@ -8,26 +8,8 @@
 .searchBox {
   margin-top: 2rem;
   margin-bottom: 5rem;
-  position: relative;
 }
-.users {
-  box-sizing: border-box;
-  border: 0.2rem solid black;
-  width: 90vw;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.userList {
-  box-sizing: border-box;
-  border: 0.2rem solid rgb(207, 36, 36);
-  width: 15rem;
-  height: 15rem;
-  margin: 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
+
 .userList h5 {
   margin-top: 1rem;
   margin-left: 0.5rem;
@@ -49,4 +31,5 @@ button {
   margin-top: 2rem;
   margin-left: 5rem;
   cursor: pointer;
+  background-color: rgb(55, 184, 171);
 }

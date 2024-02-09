@@ -16,7 +16,6 @@ function Card(props) {
   );
 }
 Card.propTypes = {
-  // Define prop types here
   filteredUsers: PropTypes.array.isRequired,
 };
 export default Card;
