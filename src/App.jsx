@@ -5,6 +5,7 @@ import userData from "./ApiData.jsx";
 function App() {
   const [users, setUsers] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [searchTextHistory, setSearchTextHistory] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
 
   useEffect(() => {
@@ -12,7 +13,7 @@ function App() {
       try {
         const userList = await userData.getApiData();
         setUsers(userList);
-        setFilteredUsers(userList); // Initialize filteredUsers with all users
+        setFilteredUsers(userList);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -21,9 +22,25 @@ function App() {
     fetchData();
   }, []);
 
-  const handleSearch = (e) => {
+  const handleSearchChange = (e) => {
     setSearchText(e.target.value);
-    filterUsers(e.target.value);
+    filterUsers(e.target.value); // Filter users as user types
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault(); // Prevent form submission
+    const text = searchText;
+    storedHistory(text); // Store search text in history
+  };
+
+  const storedHistory = (text) => {
+    setSearchTextHistory((prevHistory) => {
+      if (prevHistory.length >= 4) {
+        prevHistory.pop();
+      }
+      // Add the new search text to the beginning of the history
+      return [text, ...prevHistory];
+    });
   };
 
   const filterUsers = (searchText) => {
@@ -33,15 +50,37 @@ function App() {
     setFilteredUsers(filtered);
   };
 
+  const handleHistoryItemClick = (item) => {
+    setSearchText(item);
+    filterUsers(item); // Filter users when history item is clicked
+  };
+
   return (
     <div className="container">
       <div className="searchBox">
-        <input
-          type="text"
-          placeholder="Search By Name"
-          value={searchText}
-          onChange={handleSearch}
-        />
+        <form onSubmit={handleSearchSubmit}>
+          <input
+            type="text"
+            placeholder="Search By Name"
+            value={searchText}
+            onChange={handleSearchChange}
+          />
+        </form>
+        {searchTextHistory.length > 0 && (
+          <div className="search-history">
+            <ul className="search-list">
+              {searchTextHistory.map((item, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleHistoryItemClick(item)}
+                  id="list"
+                >
+                  <h5>{item}</h5>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
       <div className="users">
         {filteredUsers.map((user, id) => (

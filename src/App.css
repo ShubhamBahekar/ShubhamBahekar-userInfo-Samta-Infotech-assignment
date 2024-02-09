@@ -8,6 +8,7 @@
 .searchBox {
   margin-top: 2rem;
   margin-bottom: 5rem;
+  position: relative;
 }
 .users {
   box-sizing: border-box;
@@ -31,4 +32,22 @@
 .userList h5 {
   margin-top: 1rem;
   margin-left: 0.5rem;
+}
+.search-list ol {
+  width: 6rem;
+  height: 1rem;
+  position: absolute;
+  background-color: aqua;
+  list-style-type: none;
+  border: 0.1rem solid black;
+}
+#list {
+  box-sizing: border-box;
+
+  background-color: bisque;
+  list-style-type: none;
+  border: 0.1rem solid rebeccapurple;
+  border-radius: 10%;
+  margin-top: 0.2em;
+  text-align: center;
 }
