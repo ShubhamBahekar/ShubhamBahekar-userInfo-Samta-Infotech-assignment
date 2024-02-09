@@ -1,34 +1,52 @@
 import { useEffect, useState } from "react";
-import "./App.jsx";
+import "./App.css";
 import userData from "./ApiData.jsx";
 
 function App() {
   const [users, setUsers] = useState([]);
   const [searchText, setSearchText] = useState("");
-  const [searchHistory, setSearchHistory] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const userList = await userData.getApiData();
-      setUsers(userList);
+      try {
+        const userList = await userData.getApiData();
+        setUsers(userList);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
 
     fetchData();
   }, []);
 
+  const handleSearch = (e) => {
+    setSearchText(e.target.value);
+  };
+
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   return (
     <div className="container">
       <div className="searchBox">
-        <h1>Hello</h1>
         <input
           type="text"
           placeholder="Search By Name"
           value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
+          onChange={handleSearch}
         />
       </div>
       <div className="users">
-        <div className="userList"></div>
+        {filteredUsers.map((user, id) => (
+          <div className="userList" key={id}>
+            <h5>Name: {user.name}</h5>
+            <h5>Username: {user.username}</h5>
+            <h5>Email: {user.email}</h5>
+            <h5>City: {user.address.city}</h5>
+            <h5>CompanyName: {user.company.name}</h5>
+          </div>
+        ))}
       </div>
     </div>
   );
