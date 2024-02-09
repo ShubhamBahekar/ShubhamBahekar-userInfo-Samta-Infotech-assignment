@@ -13,13 +13,27 @@ function App() {
       try {
         const userList = await userData.getApiData();
         setUsers(userList);
-        setFilteredUsers(userList);
+        setFilteredUsers(userList); // Initialize filteredUsers with all users
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
+
+    // Retrieve search history from localStorage on component mount
+    const localStorageData = localStorage.getItem("userSearchText");
+    console.log("localStorageData:", localStorageData);
+    if (localStorageData) {
+      console.log("Parsing localStorageData...");
+      try {
+        const parsedData = JSON.parse(localStorageData);
+        console.log("Parsed data:", parsedData);
+        setSearchTextHistory(parsedData);
+      } catch (error) {
+        console.error("Error parsing localStorageData:", error);
+      }
+    }
   }, []);
 
   const handleSearchChange = (e) => {
@@ -35,11 +49,12 @@ function App() {
 
   const storedHistory = (text) => {
     setSearchTextHistory((prevHistory) => {
-      if (prevHistory.length >= 4) {
-        prevHistory.pop();
-      }
-      // Add the new search text to the beginning of the history
-      return [text, ...prevHistory];
+      // Maintain a maximum of 5 items in search history
+      const updatedHistory = [text, ...prevHistory.slice(0, 4)];
+      console.log("Updated history:", updatedHistory);
+      localStorage.setItem("userSearchText", JSON.stringify(updatedHistory));
+      console.log("Stored in local storage:", JSON.stringify(updatedHistory));
+      return updatedHistory;
     });
   };
 
@@ -53,6 +68,15 @@ function App() {
   const handleHistoryItemClick = (item) => {
     setSearchText(item);
     filterUsers(item); // Filter users when history item is clicked
+  };
+
+  const sortDataByName = () => {
+    const sortedUsers = [...users].sort((a, b) => {
+      if (a.name < b.name) return -1;
+      if (a.name > b.name) return 1;
+      return 0;
+    });
+    setFilteredUsers(sortedUsers);
   };
 
   return (
@@ -81,6 +105,7 @@ function App() {
             </ul>
           </div>
         )}
+        <button onClick={sortDataByName}>Search by Name</button>
       </div>
       <div className="users">
         {filteredUsers.map((user, id) => (

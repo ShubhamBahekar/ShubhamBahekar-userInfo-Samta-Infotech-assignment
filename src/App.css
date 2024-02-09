@@ -14,7 +14,6 @@
   box-sizing: border-box;
   border: 0.2rem solid black;
   width: 90vw;
-  height: 90vh;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -50,4 +49,11 @@
   border-radius: 10%;
   margin-top: 0.2em;
   text-align: center;
+  cursor: pointer;
+}
+
+button {
+  margin-top: 2rem;
+  margin-left: 5rem;
+  cursor: pointer;
 }
