@@ -5,12 +5,14 @@ import userData from "./ApiData.jsx";
 function App() {
   const [users, setUsers] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const userList = await userData.getApiData();
         setUsers(userList);
+        setFilteredUsers(userList); // Initialize filteredUsers with all users
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -21,11 +23,15 @@ function App() {
 
   const handleSearch = (e) => {
     setSearchText(e.target.value);
+    filterUsers(e.target.value);
   };
 
-  const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(searchText.toLowerCase())
-  );
+  const filterUsers = (searchText) => {
+    const filtered = users.filter((user) =>
+      user.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setFilteredUsers(filtered);
+  };
 
   return (
     <div className="container">
